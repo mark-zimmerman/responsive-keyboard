@@ -12,6 +12,11 @@ let colors_input = document.querySelector('.colors_input');
 let keyboard_lights = document.querySelector('.keyboard_lights');
 let keyboard_wrapper = document.querySelector('.keyboard_wrapper');
 let random_word = document.querySelector('.word-display');
+let time_display = document.querySelector('.time-display');
+let timeSec = 60;
+let score = 0;
+let score_display = document.querySelector('.score');
+// let text_border = document.querySelector('.text:focus');
 
 //sets attributes for each key//
 for(let i = 0; i < keys.length; i++) {
@@ -19,6 +24,22 @@ for(let i = 0; i < keys.length; i++) {
     keys[i].setAttribute('lowerCaseName', keys[i].innerText.toLowerCase());
 
 }
+
+//Disables enter key default function//
+document.addEventListener('keypress', function (e) {
+    if (e.keyCode === 32 || e.which === 32) {
+        e.preventDefault();
+        return false;
+    }
+});
+
+//Disables space key default function//
+document.addEventListener('keypress', function (e) {
+    if (e.keyCode === 13 || e.which === 13) {
+        e.preventDefault();
+        return false;
+    }
+});
 
 //keydown functions//
 window.addEventListener('keydown', function(e) {
@@ -38,9 +59,7 @@ window.addEventListener('keydown', function(e) {
         if(e.code == 'CapsLock') {
             caps_lock_key.classList.toggle('active');
         }
-
     }
-
 });
 
 //Key up functions//
@@ -93,23 +112,86 @@ colors_input.addEventListener('input', function() {
     keyboard_lights.style.background = colors_input.value;
 });
 
+//Create and display timer//
+let startTimer = function() {
+   const countDown = setInterval( function() {
+        timeSec--;
+        time_display.innerHTML = `00:${timeSec}`
+        if ( timeSec === 0 ) {
+            time_display.innerHTML = `Times Up`;
+            clearInterval(countDown);
+        }
+        return timeSec;
+    },1000);
+}
+
 //Fetches random word and displays it//
 window.addEventListener('keydown', function(event) {
+    let val = text_input.value;
     if (event.code === 'Space' ) {
         fetch('https://random-word-api.herokuapp.com/word?number=1')
                 .then(response => response.json())
-                .then(data => random_word.innerHTML = data);
+                .then(data => random_word.innerHTML = data)
         document.querySelector('.text').value = "";
+    if (timeSec === 60){
+        startTimer();
+      }
+      
+    if (random_word.innerHTML === val) {
+            console.log('Correct');
+            correctDisplay();
+        } else {
+        console.log('wrong');
+        if(timeSec < 60) {
+            incorrectDisplay();
+        }
     }
     
+  }
 });
-
-
-//Disables enter key default function//
-document.addEventListener('keypress', function (e) {
-    if (e.keyCode === 13 || e.which === 13) {
-        e.preventDefault();
-        return false;
+//Correct answer display//
+let correctDisplay = function() {
+    text_input.classList.remove('text:focus');
+    text_input.classList.add('correct');
+    
+    if(text_input.classList.contains('active') === true) {
+        text_input.classList.remove('active');
     }
-});
+    
+    if (timeSec > 0) {score++;
+    score_display.innerHTML = `${score}`;
+    }
+    setTimeout(function(){
+        text_input.classList.remove('correct');
+        if (body.classList.contains('active')) {
+            text_input.classList.add('active');
+        }
+    },500); 
+}
+
+//Incorrect answer display//
+let incorrectDisplay = function() {
+    text_input.classList.remove('text:focus');
+    text_input.classList.add('incorrect');
+    
+    if(text_input.classList.contains('active') === true) {
+        text_input.classList.remove('active');
+    }
+    
+    
+
+    setTimeout(function(){
+        // score_display.innerHTML = `${score}`;
+        text_input.classList.remove('incorrect');
+        if (body.classList.contains('active')) {
+            text_input.classList.add('active');
+        }
+        
+    },500); 
+}
+
+
+
+
+
 
