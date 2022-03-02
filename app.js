@@ -13,10 +13,52 @@ let keyboard_lights = document.querySelector('.keyboard_lights');
 let keyboard_wrapper = document.querySelector('.keyboard_wrapper');
 let random_word = document.querySelector('.word-display');
 let time_display = document.querySelector('.time-display');
-let timeSec = 60;
+let container = document.querySelector('.container');
+let start_btn = document.querySelector('.start-btn');
+let try_again_btn = document.querySelector('.try-again-btn');
+let start_menu = document.querySelector('.start-menu');
+let game_over_menu = document.querySelector('.game-over-menu');
+let menu_results = document.querySelector('.menu-results');
+
+let timeSec = 10;
 let score = 0;
 let score_display = document.querySelector('.score');
-// let text_border = document.querySelector('.text:focus');
+
+
+
+//Start Menu Button Click//
+
+start_btn.addEventListener('click', function() {
+    show_game();
+
+});
+//Restart Menu Button Click//
+
+// try_again_btn.addEventListener('click', function() {
+//     game_over_menu.classList.add('clear');
+//     show_game();
+//     timeSec = 10;
+//     score = 0;
+//     time_display.innerHTML = `00:${timeSec}`
+// });
+
+//Hides start menu and displays game//
+let show_game = function() {
+    container.classList.remove('clear');
+    start_menu.classList.add('clear');
+    body.classList.remove('start-page');
+    text_input.focus();
+}
+//Hides game and displays game over menu//
+let end_game = function() {
+    container.classList.add('clear');
+    game_over_menu.classList.remove('clear');
+    menu_results.innerHTML += `Score: ${score}`;
+    body.classList.add('start-page');
+    
+}
+
+
 
 //sets attributes for each key//
 for(let i = 0; i < keys.length; i++) {
@@ -120,6 +162,7 @@ let startTimer = function() {
         if ( timeSec === 0 ) {
             time_display.innerHTML = `Times Up`;
             clearInterval(countDown);
+            end_game();
         }
         return timeSec;
     },1000);
@@ -128,24 +171,24 @@ let startTimer = function() {
 //Fetches random word and displays it//
 window.addEventListener('keydown', function(event) {
     let val = text_input.value;
-    if (event.code === 'Space' ) {
+    if (event.code === 'Space' && this.document.activeElement === text_input) {
         fetch('https://random-word-api.herokuapp.com/word?number=1')
                 .then(response => response.json())
                 .then(data => random_word.innerHTML = data)
         document.querySelector('.text').value = "";
-    if (timeSec === 60){
-        startTimer();
-      }
-      
-    if (random_word.innerHTML === val) {
-            console.log('Correct');
-            correctDisplay();
-        } else {
-        console.log('wrong');
-        if(timeSec < 60) {
-            incorrectDisplay();
+        if (timeSec === 10 && this.document.activeElement === text_input){
+            startTimer();
         }
-    }
+        
+        if (random_word.innerHTML === val) {
+                console.log('Correct');
+                correctDisplay();
+            } else {
+            console.log('wrong');
+            if(timeSec < 10) {
+                incorrectDisplay();
+            }
+        }
     
   }
 });
@@ -178,10 +221,7 @@ let incorrectDisplay = function() {
         text_input.classList.remove('active');
     }
     
-    
-
     setTimeout(function(){
-        // score_display.innerHTML = `${score}`;
         text_input.classList.remove('incorrect');
         if (body.classList.contains('active')) {
             text_input.classList.add('active');
@@ -190,6 +230,12 @@ let incorrectDisplay = function() {
     },500); 
 }
 
+//Restart Menu Button Click//
+
+try_again_btn.addEventListener('click', function() {
+    
+    document.location.reload(true);
+ });
 
 
 

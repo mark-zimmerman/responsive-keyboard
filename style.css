@@ -132,8 +132,9 @@ body.active{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 100%;
-    margin-top: 100px;
+    height: 80%;
+    margin-top: 200px;
+    
 }
 .keys.keys_night {
     background: #3c3c3c;
@@ -215,4 +216,76 @@ body.active{
 }
 .incorrect {
     background: red;
+}
+.time-display {
+    position: absolute;
+    left: 5px;
+    top: 30px;
+    height: 1em;
+    width: 200px;
+    text-align: center;
+}
+.score {
+    position: absolute;
+    left: 5px;
+    top: 60px;
+    height: 1em;
+    width: 200px;
+    text-align: center;
+}
+.start-page {
+    background:rgb(54, 54, 54);
+    z-index: 6;
+}
+
+.abs-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+
+
+}
+.center {
+    margin: 0 auto;
+    /* text-align: center; */
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+}
+
+.btn {
+    margin: 0 auto;
+    cursor: pointer;
+    padding: 10px 20px 10px 20px;
+    border: 2px solid rgb(126, 255, 71);
+    color: rgb(126, 255, 71);
+    background:rgb(54, 54, 54);
+    margin-top: 50px;
+    font-size: xx-large;
+    border-radius: 5px;
+
+}
+
+.start-menu {
+    display: flex;
+    flex-direction: column;
+
+    
+}
+.menu-results {
+    color: white;
+    font-size: 50px;
+}
+
+.menu-directions {
+    color: white;
+    margin-top: 30px;
+}
+.clear {
+    display: none;
+}
+.start-heading {
+    color:rgb(126, 255, 71);
 }
